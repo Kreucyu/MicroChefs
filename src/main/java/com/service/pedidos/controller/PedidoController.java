@@ -1,6 +1,7 @@
 package com.service.pedidos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.pedidos.dto.RecoveryPedidoDto;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,12 @@ public class PedidoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoDto>> exibirTodosPedidos() {
+    public ResponseEntity<List<RecoveryPedidoDto>> exibirTodosPedidos() {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirTodosPedidos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecoveryPedidoDto> exibirPedido(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirPedidoId(id));
     }
 }

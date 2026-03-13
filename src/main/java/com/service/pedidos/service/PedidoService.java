@@ -1,5 +1,6 @@
 package com.service.pedidos.service;
 
+import com.service.pedidos.dto.RecoveryPedidoDto;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.repository.PedidoRepository;
 import org.modelmapper.ModelMapper;
@@ -27,13 +28,13 @@ public class PedidoService {
         return pedidoSalvar;
     }
 
-    public PedidoDto getProductDto() {
-        Pedido pedido = this.pedidoRepository.findById(1L).get();
-        return modelMapper.map(pedido, PedidoDto.class);
+    public RecoveryPedidoDto exibirPedidoId(Long id) {
+        Pedido pedido = this.pedidoRepository.findById(id).get();
+        return modelMapper.map(pedido, RecoveryPedidoDto.class);
     }
 
-    public List<PedidoDto> exibirTodosPedidos() {
+    public List<RecoveryPedidoDto> exibirTodosPedidos() {
         List<Pedido> pedidos = this.pedidoRepository.findAll();
-        return pedidos.stream().map(pedido -> modelMapper.map(pedido, PedidoDto.class)).toList();
+        return pedidos.stream().map(pedido -> modelMapper.map(pedido, RecoveryPedidoDto.class)).toList();
     }
 }
