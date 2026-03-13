@@ -1,12 +1,10 @@
 package com.service.pedidos.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
