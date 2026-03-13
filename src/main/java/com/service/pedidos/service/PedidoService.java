@@ -1,14 +1,11 @@
 package com.service.pedidos.service;
 
-import com.service.pedidos.dto.PedidoDto;
-import com.service.pedidos.entities.ItemPedido;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.repository.PedidoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
