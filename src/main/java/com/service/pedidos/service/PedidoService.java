@@ -1,5 +1,6 @@
 package com.service.pedidos.service;
 
+import com.service.pedidos.entities.ItemPedido;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class PedidoService {
     }
 
     public Pedido criarPedido(Pedido pedido){
+        pedido.getItens().forEach(item -> item.associarAoPedido(pedido));
         Pedido pedidoSalvar = pedidoRepository.save(pedido);
         return pedidoSalvar;
     }

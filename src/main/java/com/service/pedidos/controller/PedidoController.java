@@ -21,4 +21,6 @@ public class PedidoController {
         Pedido novoPedido = pedidoService.criarPedido(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
     }
+
+    
 }
