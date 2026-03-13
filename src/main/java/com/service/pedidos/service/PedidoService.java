@@ -43,4 +43,10 @@ public class PedidoService {
         List<Pedido> pedidos = this.pedidoRepository.findAll();
         return pedidos.stream().map(pedido -> modelMapper.map(pedido, RecoveryPedidoDto.class)).toList();
     }
+
+    public String deletarPedidoId(Long id) {
+        Pedido pedido = this.pedidoRepository.findById(id).get();
+        this.pedidoRepository.delete(pedido);
+        return "Pedido deletado com sucesso";
+    }
 }

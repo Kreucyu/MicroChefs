@@ -3,7 +3,6 @@ package com.service.pedidos.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
-import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +34,10 @@ public class PedidoController {
     @GetMapping("/{id}")
     public ResponseEntity<RecoveryPedidoDto> exibirPedido(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirPedidoId(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarPedido(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.deletarPedidoId(id));
     }
 }
