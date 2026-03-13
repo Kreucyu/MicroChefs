@@ -46,7 +46,7 @@ public class PedidoService {
             pedido.adicionarItem(itemPedido);
         }
         pedidoRepository.save(pedido);
-        return createPedidoDto;
+        return modelMapper.map(pedido, CreatePedidoDto.class);
     }
 
     public RecoveryPedidoDto exibirPedidoId(Long id) {
