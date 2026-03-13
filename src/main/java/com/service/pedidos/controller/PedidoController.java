@@ -1,6 +1,7 @@
 package com.service.pedidos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.service.PedidoService;
@@ -22,9 +23,8 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        Pedido novoPedido = pedidoService.criarPedido(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
+    public ResponseEntity<RecoveryPedidoDto> criarPedido(@RequestBody CreatePedidoDto createPedidoDtoPedido) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.criarPedido(createPedidoDtoPedido));
     }
 
     @GetMapping

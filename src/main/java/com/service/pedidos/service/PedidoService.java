@@ -1,5 +1,6 @@
 package com.service.pedidos.service;
 
+import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.repository.PedidoRepository;
@@ -22,10 +23,15 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
-    public Pedido criarPedido(Pedido pedido){
+    public RecoveryPedidoDto criarPedido(CreatePedidoDto createPedidoDto) {
+        Pedido pedido = modelMapper.map(createPedidoDto, Pedido.class);
         pedido.getItens().forEach(item -> item.associarAoPedido(pedido));
         Pedido pedidoSalvar = pedidoRepository.save(pedido);
-        return pedidoSalvar;
+        return exibirDto(pedidoSalvar);
+    }
+
+    private RecoveryPedidoDto exibirDto(Pedido pedido) {
+        return modelMapper.map(pedido, RecoveryPedidoDto.class);
     }
 
     public RecoveryPedidoDto exibirPedidoId(Long id) {
