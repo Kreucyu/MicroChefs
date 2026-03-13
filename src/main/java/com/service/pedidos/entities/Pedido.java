@@ -28,7 +28,7 @@ public class Pedido {
     private FormaDePagamento formaDePagamento;
 
     @OneToMany(mappedBy = "idPedido",  cascade = CascadeType.ALL)
-    private List<ItemPedido> itens =  new ArrayList<ItemPedido>();
+    private List<ItemPedido> itens =  new ArrayList<>();
 
     public Pedido() {
     }
