@@ -28,7 +28,7 @@ public class PedidoController {
     }
 
     @GetMapping
-    public PedidoDto pedidoDto() {
-        return pedidoService.getProductDto();
+    public ResponseEntity<List<PedidoDto>> exibirTodosPedidos() {
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirTodosPedidos());
     }
 }

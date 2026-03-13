@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PedidoService {
 
@@ -30,5 +33,10 @@ public class PedidoService {
     public PedidoDto getProductDto() {
         Pedido pedido = this.pedidoRepository.findById(1L).get();
         return modelMapper.map(pedido, PedidoDto.class);
+    }
+
+    public List<PedidoDto> exibirTodosPedidos() {
+        List<Pedido> pedidos = this.pedidoRepository.findAll();
+        return pedidos.stream().map(pedido -> modelMapper.map(pedido, PedidoDto.class)).toList();
     }
 }

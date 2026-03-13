@@ -34,10 +34,10 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido",  cascade = CascadeType.ALL)
     private List<ItemPedido> itens =  new ArrayList<>();
 
-    @Column(nullable = false)
-    private BigDecimal valorTotal = calcularValorTotalDoPedido();
+    private BigDecimal valorTotal;
 
     public Pedido() {
+        calcularValorTotalDoPedido();
     }
 
     public List<ItemPedido> getItens() {
@@ -68,13 +68,11 @@ public class Pedido {
         return valorTotal;
     }
 
-    private BigDecimal calcularValorTotalDoPedido() {
-        BigDecimal valorTotal = null;
-        for(ItemPedido item : itens) {
-            BigDecimal precoDoProduto = item.getPrecoProduto();
-            BigDecimal quantidadeDoProduto = BigDecimal.valueOf(item.getQuantidadeProduto());
-            valorTotal.add(precoDoProduto.multiply(quantidadeDoProduto));
-        }
-        return valorTotal;
+    @PrePersist
+    @PreUpdate
+    private void calcularValorTotalDoPedido() {
+        this.valorTotal = itens.stream()
+                .map(item -> item.getPrecoProduto().multiply(BigDecimal.valueOf((item.getQuantidadeProduto()))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

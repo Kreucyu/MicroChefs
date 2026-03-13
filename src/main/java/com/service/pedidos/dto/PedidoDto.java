@@ -7,14 +7,18 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @ToString
 public class PedidoDto {
-    private Long idPedido;
-    private BigDecimal valorTotal;
-    private StatusPedido statusPedido;
+    private Long id;
+    private StatusPedido statusDoPedido;
+    private LocalDate dataDoPedido;
     private FormaDePagamento formaDePagamento;
     private List<ItemPedido> itens;
+    private BigDecimal valorTotal;
+
+
 }
