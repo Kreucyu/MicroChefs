@@ -37,7 +37,6 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     public Pedido() {
-        calcularValorTotalDoPedido();
     }
 
     public List<ItemPedido> getItens() {
@@ -64,8 +63,32 @@ public class Pedido {
         return formaDePagamento;
     }
 
+    public void adicionarItem(ItemPedido item) {
+        itens.add(item);
+    }
+
     public BigDecimal getValorTotal() {
         return valorTotal;
+    }
+
+    public void setStatusDoPedido(StatusPedido statusDoPedido) {
+        this.statusDoPedido = statusDoPedido;
+    }
+
+    public void setDataDoPedido(LocalDate dataDoPedido) {
+        this.dataDoPedido = dataDoPedido;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public void setFormaDePagamento(FormaDePagamento formaDePagamento) {
+        this.formaDePagamento = formaDePagamento;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
     }
 
     @PrePersist

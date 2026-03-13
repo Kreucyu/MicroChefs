@@ -14,8 +14,6 @@ import java.util.List;
 @ToString
 public class CreatePedidoDto {
         private Long clienteId;
-        private StatusPedido statusPedido;
-        private LocalDate dataDoPedido;
         private FormaDePagamento formaDePagamento;
         private List<CreateItemPedidoDto> itens;
 }

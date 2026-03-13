@@ -1,13 +1,19 @@
 package com.service.pedidos.service;
 
+import com.service.pedidos.dto.CreateItemPedidoDto;
 import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
+import com.service.pedidos.entities.FormaDePagamento;
+import com.service.pedidos.entities.ItemPedido;
 import com.service.pedidos.entities.Pedido;
+import com.service.pedidos.entities.StatusPedido;
 import com.service.pedidos.repository.PedidoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,15 +29,24 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
-    public RecoveryPedidoDto criarPedido(CreatePedidoDto createPedidoDto) {
-        Pedido pedido = modelMapper.map(createPedidoDto, Pedido.class);
-        pedido.getItens().forEach(item -> item.associarAoPedido(pedido));
-        Pedido pedidoSalvar = pedidoRepository.save(pedido);
-        return exibirDto(pedidoSalvar);
-    }
+    public CreatePedidoDto criarPedido(CreatePedidoDto createPedidoDto) {
+        Pedido pedido = new Pedido();
+        pedido.setClienteId(createPedidoDto.getClienteId());
+        pedido.setDataDoPedido(LocalDate.now());
+        pedido.setStatusDoPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
+        pedido.setFormaDePagamento(createPedidoDto.getFormaDePagamento());
 
-    private RecoveryPedidoDto exibirDto(Pedido pedido) {
-        return modelMapper.map(pedido, RecoveryPedidoDto.class);
+        for(CreateItemPedidoDto itensDto : createPedidoDto.getItens()) {
+            ItemPedido itemPedido = new ItemPedido(
+                    itensDto.getQuantidadeProduto(),
+                    itensDto.getPrecoProduto(),
+                    itensDto.getIdProduto(),
+                    pedido
+            );
+            pedido.adicionarItem(itemPedido);
+        }
+        pedidoRepository.save(pedido);
+        return createPedidoDto;
     }
 
     public RecoveryPedidoDto exibirPedidoId(Long id) {

@@ -22,8 +22,8 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<RecoveryPedidoDto> criarPedido(@RequestBody CreatePedidoDto createPedidoDtoPedido) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.criarPedido(createPedidoDtoPedido));
+    public ResponseEntity<CreatePedidoDto> criarPedido(@RequestBody CreatePedidoDto createPedidoDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.criarPedido(createPedidoDto));
     }
 
     @GetMapping

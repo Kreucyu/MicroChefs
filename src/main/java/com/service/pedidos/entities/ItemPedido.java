@@ -27,12 +27,14 @@ public class ItemPedido {
     @Column(nullable = false)
     private BigDecimal precoProduto;
 
-    public ItemPedido() {
-    }
-
-    public void associarAoPedido(Pedido pedido) {
+    public ItemPedido(Integer quantidadeProduto, BigDecimal precoProduto, Long idProduto, Pedido pedido) {
+        this.quantidadeProduto = quantidadeProduto;
+        this.precoProduto = precoProduto;
+        this.idProduto = idProduto;
         this.pedido = pedido;
     }
+
+    public ItemPedido() {}
 
     public Long getId() {
         return id;
@@ -53,4 +55,5 @@ public class ItemPedido {
     public BigDecimal getPrecoProduto() {
         return precoProduto;
     }
+
 }
