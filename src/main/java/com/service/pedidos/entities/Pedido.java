@@ -34,6 +34,9 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido",  cascade = CascadeType.ALL)
     private List<ItemPedido> itens =  new ArrayList<>();
 
+    @Column(nullable = false)
+    private BigDecimal valorTotal = calcularValorTotalDoPedido();
+
     public Pedido() {
     }
 
@@ -59,5 +62,19 @@ public class Pedido {
 
     public FormaDePagamento getFormaDePagamento() {
         return formaDePagamento;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    private BigDecimal calcularValorTotalDoPedido() {
+        BigDecimal valorTotal = null;
+        for(ItemPedido item : itens) {
+            BigDecimal precoDoProduto = item.getPrecoProduto();
+            BigDecimal quantidadeDoProduto = BigDecimal.valueOf(item.getQuantidadeProduto());
+            valorTotal.add(precoDoProduto.multiply(quantidadeDoProduto));
+        }
+        return valorTotal;
     }
 }
