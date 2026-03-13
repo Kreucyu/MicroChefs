@@ -1,6 +1,7 @@
 package com.service.pedidos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.pedidos.dto.PedidoDto;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class PedidoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> listarPedidos() {
-        return ResponseEntity.ok(objectMapper.writeValueAsString());
+    public PedidoDto pedidoDto() {
+        return pedidoService.getProductDto();
     }
 }

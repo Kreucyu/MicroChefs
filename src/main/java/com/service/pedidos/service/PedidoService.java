@@ -4,6 +4,7 @@ import com.service.pedidos.dto.PedidoDto;
 import com.service.pedidos.entities.ItemPedido;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.repository.PedidoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Service;
 public class PedidoService {
 
     @Autowired
-    private final PedidoRepository pedidoRepository;
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public PedidoService(PedidoRepository pedidoRepository) {
         this.pedidoRepository = pedidoRepository;
@@ -21,5 +25,10 @@ public class PedidoService {
         pedido.getItens().forEach(item -> item.associarAoPedido(pedido));
         Pedido pedidoSalvar = pedidoRepository.save(pedido);
         return pedidoSalvar;
+    }
+
+    public PedidoDto getProductDto() {
+        Pedido pedido = this.pedidoRepository.findById(1L).get();
+        return modelMapper.map(pedido, PedidoDto.class);
     }
 }
