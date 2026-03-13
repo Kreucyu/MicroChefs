@@ -1,18 +1,22 @@
 package com.service.pedidos.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.pedidos.entities.Pedido;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
 
     private final PedidoService pedidoService;
+    private ObjectMapper objectMapper;
 
-    public PedidoController(PedidoService pedidoService) {
+    public PedidoController(PedidoService pedidoService, ObjectMapper objectMapper) {
         this.pedidoService = pedidoService;
     }
 
@@ -22,5 +26,8 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
     }
 
-    
+    @GetMapping
+    public ResponseEntity<List<Pedido>> listarPedidos() {
+        return ResponseEntity.ok(objectMapper.writeValueAsString());
+    }
 }
