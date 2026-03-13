@@ -2,10 +2,8 @@ package com.service.pedidos.dto;
 
 import java.math.BigDecimal;
 
-public record RecoveryItemPedidoDto(
-    Long idProduto,
-    Integer quantidadeProduto,
-    BigDecimal precoProduto
-){
-
+public class RecoveryItemPedidoDto {
+    private Long idProduto;
+    private Integer quantidadeProduto;
+    private BigDecimal precoProduto;
 }

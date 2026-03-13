@@ -6,12 +6,10 @@ import com.service.pedidos.entities.StatusPedido;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreatePedidoDto(
-        Long clienteId,
-        StatusPedido statusPedido,
-        LocalDate dataDoPedido,
-        FormaDePagamento formaDePagamento,
-        List<CreateItemPedidoDto> itens
-) {
-
+public class CreatePedidoDto {
+        private Long clienteId;
+        private StatusPedido statusPedido;
+        private LocalDate dataDoPedido;
+        private FormaDePagamento formaDePagamento;
+        private List<CreateItemPedidoDto> itens;
 }

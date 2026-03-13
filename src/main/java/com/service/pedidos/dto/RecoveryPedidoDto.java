@@ -8,12 +8,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public record RecoveryPedidoDto(
-        Long id,
-        StatusPedido statusDoPedido,
-        LocalDate dataDoPedido,
-        FormaDePagamento formaDePagamento,
-        List<RecoveryItemPedidoDto>itens,
-        BigDecimal valorTotal
-) {
+public class RecoveryPedidoDto {
+        private Long id;
+        private StatusPedido statusDoPedido;
+        private LocalDate dataDoPedido;
+        private FormaDePagamento formaDePagamento
+        private List<RecoveryItemPedidoDto>itens;
+        private BigDecimal valorTotal;
 }
