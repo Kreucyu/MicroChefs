@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    public final PedidoService pedidoService;
+    private final PedidoService pedidoService;
 
     public PedidoController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
@@ -18,12 +18,7 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        Pedido novoPedido = criarPedido(pedido);
+        Pedido novoPedido = pedidoService.criarPedido(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
-    }
-
-    @GetMapping
-    public ResponseEntity<Pedido> consultarPedido(@RequestParam Long id){
-        return ResponseEntity.ok();
     }
 }
