@@ -1,4 +1,4 @@
-package com.service.pedidos.application;
+package com.service.pedidos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
