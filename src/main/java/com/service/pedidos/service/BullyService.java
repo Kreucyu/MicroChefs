@@ -2,6 +2,7 @@ package com.service.pedidos.service;
 
 import com.service.pedidos.entities.NodesInfo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,6 +13,8 @@ public class BullyService {
 
         @Value("${process.id}")
         private int processId;
+
+        private Integer coordinatorId = null;
 
         private boolean isCoordinator = false;
 
@@ -70,33 +73,64 @@ public class BullyService {
             }
         }
 
-        public void becomeCoordinator() {
+    public void becomeCoordinator() {
 
-            isCoordinator = true;
+        isCoordinator = true;
+        coordinatorId = processId;
 
-            System.out.println("Node " + processId + " virou COORDENADOR");
+        System.out.println("Node " + processId + " virou COORDENADOR");
 
-            for (NodesInfo node : cluster) {
+        for (NodesInfo node : cluster) {
 
-                if (node.getId() != processId) {
+            if (node.getId() != processId) {
 
-                    try {
-                        restTemplate.postForObject(
-                                node.getUrl() + "/bully/coordinator",
-                                processId,
-                                String.class
-                        );
-                    } catch (Exception ignored) {}
-                }
+                try {
+
+                    restTemplate.postForObject(
+                            node.getUrl() + "/bully/coordinator",
+                            processId,
+                            String.class
+                    );
+
+                } catch (Exception ignored) {}
             }
         }
+    }
 
         public void receiveCoordinator(int coordinatorId) {
 
-            isCoordinator = false;
+        this.coordinatorId = coordinatorId;
+        isCoordinator = false;
 
-            System.out.println("Node " + processId + " reconhece " + coordinatorId + " como coordenador");
+        System.out.println("Node " + processId + " reconhece " + coordinatorId + " como coordenador");
         }
+
+    @Scheduled(fixedRate = 5000)
+    public void checkCoordinator() {
+
+        if (coordinatorId == null) {
+            return;
+        }
+
+        if (coordinatorId == processId) {
+            return;
+        }
+
+        try {
+
+            restTemplate.getForObject(
+                    "http://localhost:808" + coordinatorId + "/bully/ping",
+                    String.class
+            );
+
+        } catch (Exception e) {
+
+            System.out.println("Coordenador caiu! Iniciando eleição...");
+
+            coordinatorId = null;
+            startElection();
+        }
+    }
 
         public boolean isCoordinator() {
             return isCoordinator;

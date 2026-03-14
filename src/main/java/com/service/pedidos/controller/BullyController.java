@@ -37,4 +37,9 @@ public class BullyController {
 
         System.out.println("Recebeu OK de " + senderId);
     }
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "alive";
+    }
 }
