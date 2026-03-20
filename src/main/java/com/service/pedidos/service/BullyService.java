@@ -1,6 +1,7 @@
 package com.service.pedidos.service;
 
 import com.service.pedidos.entities.NodesInfo;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -105,10 +106,23 @@ public class BullyService {
         System.out.println("Node " + processId + " reconhece " + coordinatorId + " como coordenador");
         }
 
+        public void getPrimeiroCoordenador() {
+            int maiorNo = 0;
+            for(NodesInfo node : cluster) {
+                if(node.getId() > maiorNo) {
+                    maiorNo = node.getId();
+                }
+            }
+            if(processId == maiorNo) {
+                becomeCoordinator();
+            }
+        }
+
     @Scheduled(fixedRate = 5000)
     public void checkCoordinator() {
 
         if (coordinatorId == null) {
+            getPrimeiroCoordenador();
             return;
         }
 
