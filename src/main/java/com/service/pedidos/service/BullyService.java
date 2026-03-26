@@ -7,13 +7,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
+
 @Service
 public class BullyService {
 
-        @Value("${process.id}")
-        private int processId;
+
+        private int processId = getProcessId();
 
         private Integer coordinatorId = null;
 
@@ -27,7 +33,10 @@ public class BullyService {
                 new NodesInfo(3, "http://localhost:8083")
         );
 
-        public void startElection() {
+    public BullyService() throws IOException {
+    }
+
+    public void startElection() {
 
             System.out.println("Node " + processId + " iniciou eleição");
 
@@ -144,6 +153,11 @@ public class BullyService {
             coordinatorId = null;
             startElection();
         }
+    }
+
+    public int getProcessId() throws IOException {
+        BufferedReader br = new BufferedReader((new FileReader("var/run/processid.pid")));
+        return Integer.parseInt(br.readLine());
     }
 
         public boolean isCoordinator() {

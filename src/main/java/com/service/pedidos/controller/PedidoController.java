@@ -3,6 +3,7 @@ package com.service.pedidos.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
+import com.service.pedidos.dto.UpdatePedidoDto;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,10 @@ public class PedidoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarPedido(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.deletarPedidoId(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UpdatePedidoDto> atualizarStatusPedido(@PathVariable Long id, @RequestBody UpdatePedidoDto updatePedidoDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.atualizarStatusPedido(id, updatePedidoDto));
     }
 }
