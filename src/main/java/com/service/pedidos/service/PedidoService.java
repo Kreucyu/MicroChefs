@@ -67,6 +67,7 @@ public class PedidoService {
     public UpdatePedidoDto atualizarStatusPedido(Long id, UpdatePedidoDto updatePedidoDto) {
         Pedido pedido = this.pedidoRepository.findById(id).get();
         pedido.setStatusDoPedido(updatePedidoDto.getStatusPedido());
+        pedidoRepository.save(pedido);
         return updatePedidoDto;
     }
 }
