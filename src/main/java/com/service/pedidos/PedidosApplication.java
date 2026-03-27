@@ -15,9 +15,7 @@ import java.io.IOException;
 public class PedidosApplication {
 
 	public static void main(String[] args) throws IOException {
-		SpringApplication application = new SpringApplication(PedidosApplication.class);
-		application.addListeners(new ApplicationPidFileWriter());
-		application.run(args);
+		SpringApplication.run(PedidosApplication.class, args);
 	}
 
 }

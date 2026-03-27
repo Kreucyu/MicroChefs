@@ -18,10 +18,10 @@ import static java.lang.Integer.parseInt;
 @Service
 public class BullyService {
 
+        @Value("${processId}")
+        private long processId;
 
-        private int processId = getProcessId();
-
-        private Integer coordinatorId = null;
+        private long coordinatorId = 0;
 
         private boolean isCoordinator = false;
 
@@ -130,7 +130,7 @@ public class BullyService {
     @Scheduled(fixedRate = 5000)
     public void checkCoordinator() {
 
-        if (coordinatorId == null) {
+        if (coordinatorId == 0) {
             getPrimeiroCoordenador();
             return;
         }
@@ -150,17 +150,8 @@ public class BullyService {
 
             System.out.println("Coordenador caiu! Iniciando eleição...");
 
-            coordinatorId = null;
+            coordinatorId = 0;
             startElection();
         }
     }
-
-    public int getProcessId() throws IOException {
-        BufferedReader br = new BufferedReader((new FileReader("var/run/processid.pid")));
-        return Integer.parseInt(br.readLine());
-    }
-
-        public boolean isCoordinator() {
-            return isCoordinator;
-        }
     }
