@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import tools.jackson.databind.annotation.JsonAppend;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,16 +34,16 @@ public class PedidoService {
 
     public CreatePedidoDto criarPedido(CreatePedidoDto createPedidoDto) {
         Pedido pedido = new Pedido();
-        pedido.setClienteId(createPedidoDto.getClienteId());
+        pedido.setClienteId(createPedidoDto.clienteId());
         pedido.setDataDoPedido(LocalDate.now());
         pedido.setStatusDoPedido(StatusPedido.CRIADO);
-        pedido.setFormaDePagamento(createPedidoDto.getFormaDePagamento());
+        pedido.setFormaDePagamento(createPedidoDto.formaDePagamento());
 
-        for(CreateItemPedidoDto itensDto : createPedidoDto.getItens()) {
+        for(CreateItemPedidoDto itensDto : createPedidoDto.itens()) {
             ItemPedido itemPedido = new ItemPedido(
-                    itensDto.getQuantidadeProduto(),
-                    itensDto.getPrecoProduto(),
-                    itensDto.getIdProduto(),
+                    itensDto.quantidadeProduto(),
+                    itensDto.precoProduto(),
+                    itensDto.idProduto(),
                     pedido
             );
             pedido.adicionarItem(itemPedido);
@@ -61,13 +62,24 @@ public class PedidoService {
                 pedido.getStatusDoPedido(),
                 pedido.getDataDoPedido(),
                 pedido.getFormaDePagamento(),
-                new RecoveryItemPedidoDto(pedido.getItens()),
+                pedido.getItens().stream().map(u -> new RecoveryItemPedidoDto(
+                        u.getIdProduto(),
+                        u.getQuantidadeProduto(),
+                        u.getPrecoProduto())).toList(),
                 pedido.getValorTotal());
     }
 
     public List<RecoveryPedidoDto> exibirTodosPedidos() {
         List<Pedido> pedidos = this.pedidoRepository.findAll();
-        return pedidos.stream().map(pedido -> modelMapper.map(pedido, RecoveryPedidoDto.class)).toList();
+        return pedidos.stream().map(pedido -> new RecoveryPedidoDto(pedido.getId(),
+                pedido.getStatusDoPedido(),
+                pedido.getDataDoPedido(),
+                pedido.getFormaDePagamento(),
+                pedido.getItens().stream().map(u -> new RecoveryItemPedidoDto(
+                        u.getIdProduto(),
+                        u.getQuantidadeProduto(),
+                        u.getPrecoProduto())).toList(),
+                pedido.getValorTotal())).toList();
     }
 
     public String deletarPedidoId(Long id) {
@@ -78,7 +90,7 @@ public class PedidoService {
 
     public UpdatePedidoDto atualizarStatusPedido(Long id, UpdatePedidoDto updatePedidoDto) {
         Pedido pedido = this.pedidoRepository.findById(id).get();
-        pedido.setStatusDoPedido(updatePedidoDto.getStatusPedido());
+        pedido.setStatusDoPedido(updatePedidoDto.statusPedido());
         if(pedido.getStatusDoPedido().equals(StatusPedido.PAGO)) {
             enviarPedidoParaCozinha(pedido);
         }

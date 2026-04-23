@@ -13,7 +13,7 @@ public class PedidoProducer {
     private AmqpTemplate amqpTemplate;
 
     @Autowired
-    private final ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     public PedidoProducer(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
