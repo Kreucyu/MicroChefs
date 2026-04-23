@@ -1,12 +1,14 @@
 package com.service.pedidos.controller;
 
 import com.service.pedidos.service.BullyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bully")
 public class BullyController {
 
+    @Autowired
     private final BullyService bullyService;
 
     public BullyController(BullyService bullyService) {
