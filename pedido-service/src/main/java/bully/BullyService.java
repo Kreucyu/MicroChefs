@@ -1,16 +1,10 @@
-package com.service.pedidos.service;
+package bully;
 
-import com.service.pedidos.entities.NodesInfo;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -127,7 +121,7 @@ public class BullyService {
             }
         }
 
-    @Scheduled(fixedRate = 5000)
+    //@Scheduled(fixedRate = 5000)
     public void checkCoordinator() {
 
         if (coordinatorId == 0) {

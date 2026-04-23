@@ -1,4 +1,4 @@
-package com.service.pedidos.entities;
+package bully;
 
 public class NodesInfo {
 

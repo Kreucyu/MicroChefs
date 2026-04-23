@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-@EnableScheduling
+//@EnableScheduling
 @SpringBootApplication
 public class PedidosApplication {
 

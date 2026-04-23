@@ -1,6 +1,5 @@
-package com.service.pedidos.controller;
+package bully;
 
-import com.service.pedidos.service.BullyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
