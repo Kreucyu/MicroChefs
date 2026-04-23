@@ -7,13 +7,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-public class CreatePedidoDto {
-        private Long clienteId;
-        private FormaDePagamento formaDePagamento;
-        private List<CreateItemPedidoDto> itens;
+public record CreatePedidoDto(
+        Long clienteId,
+        FormaDePagamento formaDePagamento,
+        List<CreateItemPedidoDto> itens
+) {
+
 }

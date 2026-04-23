@@ -5,16 +5,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-public class CreateItemPedidoDto {
-        @NotNull
-        private Long idProduto;
-        @NotNull
-        private Integer quantidadeProduto;
-        @NotNull
-        private BigDecimal precoProduto;
+public record CreateItemPedidoDto(
+        @NotNull Long idProduto,
+        @NotNull Integer quantidadeProduto,
+        @NotNull BigDecimal precoProduto
+) {
 }
