@@ -3,6 +3,10 @@ package com.service.pedidos.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "pedidos")
 public class Pedido {
     @Id
@@ -36,59 +44,8 @@ public class Pedido {
 
     private BigDecimal valorTotal;
 
-    public Pedido() {
-    }
-
-    public List<ItemPedido> getItens() {
-        return itens;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public StatusPedido getStatusDoPedido() {
-        return statusDoPedido;
-    }
-
-    public LocalDate getDataDoPedido() {
-        return dataDoPedido;
-    }
-
-    public FormaDePagamento getFormaDePagamento() {
-        return formaDePagamento;
-    }
-
     public void adicionarItem(ItemPedido item) {
         itens.add(item);
-    }
-
-    public BigDecimal getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setStatusDoPedido(StatusPedido statusDoPedido) {
-        this.statusDoPedido = statusDoPedido;
-    }
-
-    public void setDataDoPedido(LocalDate dataDoPedido) {
-        this.dataDoPedido = dataDoPedido;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
-
-    public void setFormaDePagamento(FormaDePagamento formaDePagamento) {
-        this.formaDePagamento = formaDePagamento;
-    }
-
-    public void setItens(List<ItemPedido> itens) {
-        this.itens = itens;
     }
 
     @PrePersist

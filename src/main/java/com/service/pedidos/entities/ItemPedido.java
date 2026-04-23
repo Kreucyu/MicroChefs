@@ -2,11 +2,17 @@ package com.service.pedidos.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "item_pedido")
 public class ItemPedido {
     @Id
@@ -32,28 +38,6 @@ public class ItemPedido {
         this.precoProduto = precoProduto;
         this.idProduto = idProduto;
         this.pedido = pedido;
-    }
-
-    public ItemPedido() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
-    public Integer getQuantidadeProduto() {
-        return quantidadeProduto;
-    }
-
-    public BigDecimal getPrecoProduto() {
-        return precoProduto;
     }
 
 }
