@@ -1,3 +1,5 @@
 spring:
   application:
     name: cozinha
+server:
+  port: 9090

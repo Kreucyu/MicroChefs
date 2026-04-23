@@ -32,7 +32,7 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setClienteId(createPedidoDto.getClienteId());
         pedido.setDataDoPedido(LocalDate.now());
-        pedido.setStatusDoPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
+        pedido.setStatusDoPedido(StatusPedido.CRIADO);
         pedido.setFormaDePagamento(createPedidoDto.getFormaDePagamento());
 
         for(CreateItemPedidoDto itensDto : createPedidoDto.getItens()) {

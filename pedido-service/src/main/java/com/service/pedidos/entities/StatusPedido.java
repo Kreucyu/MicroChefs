@@ -1,5 +1,5 @@
 package com.service.pedidos.entities;
 
 public enum StatusPedido {
-    AGUARDANDO_PAGAMENTO, PAGO, EM_PREPARO, PRONTO, CANCELADO;
+    CRIADO, AGUARDANDO_PAGAMENTO, PAGO, EM_PREPARO, PRONTO, CANCELADO;
 }
