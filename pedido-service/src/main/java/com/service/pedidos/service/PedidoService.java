@@ -85,8 +85,8 @@ public class PedidoService {
         return "Pedido deletado com sucesso";
     }
 
-    public UpdatePedidoDto atualizarStatusPedido(Long id, UpdatePedidoDto updatePedidoDto) {
-        Pedido pedido = this.pedidoRepository.findById(id).get();
+    public UpdatePedidoDto atualizarStatusPedido(UpdatePedidoDto updatePedidoDto) {
+        Pedido pedido = this.pedidoRepository.findById(updatePedidoDto.id()).get();
         pedido.setStatusDoPedido(updatePedidoDto.statusPedido());
         if(pedido.getStatusDoPedido().equals(StatusPedido.PAGO)) {
             enviarPedidoParaCozinha(new CozinhaPedidoDto(pedido.getId(),
