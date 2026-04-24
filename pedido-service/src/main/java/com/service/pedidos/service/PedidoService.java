@@ -10,6 +10,7 @@ import com.service.pedidos.entities.StatusPedido;
 import com.service.pedidos.exceptions.ErroPedidoException;
 import com.service.pedidos.producer.PedidoProducer;
 import com.service.pedidos.repository.PedidoRepository;
+import org.hibernate.sql.Update;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,10 +48,6 @@ public class PedidoService {
                     pedido
             );
             pedido.adicionarItem(itemPedido);
-        }
-        if(pedido.getFormaDePagamento().equals(FormaDePagamento.DINHEIRO)) {
-            pedido.setStatusDoPedido(StatusPedido.PAGO);
-            enviarPedidoParaCozinha(pedido);
         }
         pedidoRepository.save(pedido);
         return createPedidoDto;
