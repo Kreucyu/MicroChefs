@@ -89,13 +89,20 @@ public class PedidoService {
         Pedido pedido = this.pedidoRepository.findById(id).get();
         pedido.setStatusDoPedido(updatePedidoDto.statusPedido());
         if(pedido.getStatusDoPedido().equals(StatusPedido.PAGO)) {
-            enviarPedidoParaCozinha(pedido);
+            enviarPedidoParaCozinha(new CozinhaPedidoDto(pedido.getId(),
+                    pedido.getDataDoPedido(),
+                    pedido.getItens()
+                            .stream()
+                            .map(p -> new CozinhaItemPedidoDto(
+                                    p.getIdProduto(),
+                                    p.getQuantidadeProduto()))
+                            .toList()));
         }
         pedidoRepository.save(pedido);
         return updatePedidoDto;
     }
 
-    private void enviarPedidoParaCozinha(Pedido pedido) {
+    private void enviarPedidoParaCozinha(CozinhaPedidoDto pedido) {
         pedidoProducer.enviarParaCozinha(pedido);
     }
 }

@@ -16,33 +16,32 @@ import java.util.List;
 public class PedidoController {
 
     private final PedidoService pedidoService;
-    private ObjectMapper objectMapper;
 
     public PedidoController(PedidoService pedidoService, ObjectMapper objectMapper) {
         this.pedidoService = pedidoService;
     }
 
-    @PostMapping
+    @PostMapping("/criar")
     public ResponseEntity<CreatePedidoDto> criarPedido(@RequestBody CreatePedidoDto createPedidoDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.criarPedido(createPedidoDto));
     }
 
-    @GetMapping
+    @GetMapping("/exibir")
     public ResponseEntity<List<RecoveryPedidoDto>> exibirTodosPedidos() {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirTodosPedidos());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/exibir/{id}")
     public ResponseEntity<RecoveryPedidoDto> exibirPedido(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.exibirPedidoId(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletarPedido(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.deletarPedidoId(id));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/atualizar")
     public ResponseEntity<UpdatePedidoDto> atualizarStatusPedido(@PathVariable Long id, @RequestBody UpdatePedidoDto updatePedidoDto) {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoService.atualizarStatusPedido(id, updatePedidoDto));
     }

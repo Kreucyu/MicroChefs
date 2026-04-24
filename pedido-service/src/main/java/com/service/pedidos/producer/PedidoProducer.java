@@ -1,5 +1,6 @@
 package com.service.pedidos.producer;
 
+import com.service.pedidos.dto.CozinhaPedidoDto;
 import com.service.pedidos.entities.Pedido;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class PedidoProducer {
         this.objectMapper = objectMapper;
     }
 
-    public void enviarParaCozinha(Pedido pedido) {
+    public void enviarParaCozinha(CozinhaPedidoDto pedido) {
         amqpTemplate.convertAndSend(
                 "pedido-exchange",
                 "pedido-key.pago",
