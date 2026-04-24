@@ -1,8 +1,8 @@
 package com.cozinha.producer;
 
+import com.cozinha.dto.UpdatePedidoDto;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
@@ -12,17 +12,14 @@ public class AtualizarPedidoProducer {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    public AtualizarPedidoProducer(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    public void enviarAtualizacao(Message message) {
+    public void enviarAtualizacao(UpdatePedidoDto update) {
         amqpTemplate.convertAndSend(
                 "pedido-exchange",
                 "pedido-key.update",
-                objectMapper.writeValueAsString(message)
+                objectMapper.writeValueAsString(update)
         );
 
     }

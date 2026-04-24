@@ -1,4 +1,11 @@
 package com.cozinha.dto;
 
-public class PedidoRecoveryDto {
+import java.time.LocalDate;
+import java.util.List;
+
+public record PedidoRecoveryDto(
+        long id,
+        LocalDate dataDoPedido,
+        List<ItemPedidoRecoveryDto> itens
+) {
 }

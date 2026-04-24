@@ -1,4 +1,9 @@
 package com.cozinha.dto;
 
-public class UpdatePedidoDto {
+import com.cozinha.entities.StatusPedido;
+
+public record UpdatePedidoDto(
+        long id,
+        StatusPedido statusPedido
+) {
 }
