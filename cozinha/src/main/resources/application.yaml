@@ -1,5 +1,10 @@
 spring:
   application:
     name: cozinha
+
+  rabbitmq:
+    port: 5672
+    addresses: amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
+
 server:
   port: 9090
