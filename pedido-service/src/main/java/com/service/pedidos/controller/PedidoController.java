@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.pedidos.dto.CreatePedidoDto;
 import com.service.pedidos.dto.RecoveryPedidoDto;
 import com.service.pedidos.dto.UpdatePedidoDto;
+import com.service.pedidos.exceptions.ErroPedidoException;
 import com.service.pedidos.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,12 @@ public class PedidoController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletarPedido(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.deletarPedidoId(id));
+        try {
+            pedidoService.deletarPedidoId(id);
+            return ResponseEntity.ok("Pedido deletado com sucesso");
+        } catch (ErroPedidoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PatchMapping("/atualizar")

@@ -79,10 +79,10 @@ public class PedidoService {
                 pedido.getValorTotal())).toList();
     }
 
-    public String deletarPedidoId(Long id) {
+    public void deletarPedidoId(Long id) {
         Pedido pedido = this.pedidoRepository.findById(id).get();
+        if(pedido == null) { throw new ErroPedidoException("Pedido não encontrado"); }
         this.pedidoRepository.delete(pedido);
-        return "Pedido deletado com sucesso";
     }
 
     public UpdatePedidoDto atualizarStatusPedido(UpdatePedidoDto updatePedidoDto) {
