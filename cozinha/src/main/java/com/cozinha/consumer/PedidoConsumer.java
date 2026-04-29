@@ -5,11 +5,12 @@ import com.cozinha.service.CozinhaService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 @Component
-@EnableRet
+@EnableRetry
 public class PedidoConsumer {
 
     @Autowired
