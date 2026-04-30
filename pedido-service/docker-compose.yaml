@@ -1,5 +1,17 @@
 services:
 
+  spring:
+    build: .
+    container_name: spring_app
+    ports:
+      - "8090:8090"
+    networks:
+      - private_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/pedidos
+      SPRING_DATASOURCE_USERNAME: docker
+      SPRING_DATASOURCE_PASSWORD: docker
+
   db:
     image: postgres:latest
     container_name: pedidos_postgres
