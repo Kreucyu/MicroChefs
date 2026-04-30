@@ -1,6 +1,7 @@
 package com.cozinha.consumer;
 
 import com.cozinha.dto.PedidoRecoveryDto;
+import com.cozinha.exceptions.PedidoIncompletoException;
 import com.cozinha.service.CozinhaService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,10 @@ public class PedidoConsumer {
     @RabbitListener(queues = { "cozinha-queue" })
     public void receberPedido(@Payload String pedidoJson) {
         PedidoRecoveryDto pedido = objectMapper.readValue(pedidoJson, PedidoRecoveryDto.class);
+        if(pedido.id() == 0 || pedido.itens() == null || pedido.dataDoPedido() == null) {
+            throw new PedidoIncompletoException("Dados incompletos");
+        }
         cozinhaService.realizarPedido(pedido);
+
     }
 }
