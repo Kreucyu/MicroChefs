@@ -1,16 +1,16 @@
 services:
 
-  spring:
-    build: .
-    container_name: spring_app
-    ports:
-      - "8090:8090"
-    networks:
-      - private_network
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/pedidos
-      SPRING_DATASOURCE_USERNAME: docker
-      SPRING_DATASOURCE_PASSWORD: docker
+  #  spring:
+  #    build: .
+  #    container_name: spring_app
+  #    ports:
+  #      - "8090:8090"
+  #    networks:
+  #      - private_network
+  #    environment:
+  #      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pedidos
+  #      SPRING_DATASOURCE_USERNAME: docker
+  #      SPRING_DATASOURCE_PASSWORD: docker
 
   db:
     image: postgres:latest
@@ -27,7 +27,7 @@ services:
     networks:
       - private_network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U docker -d docker" ]
+      test: [ "CMD-SHELL", "pg_isready -U docker -d pedidos" ]
       interval: 15s
       timeout: 5s
       retries: 5
