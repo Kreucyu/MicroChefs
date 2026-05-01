@@ -1,0 +1,3 @@
+[submodule "Cozinha"]
+	path = Cozinha
+	url = git@github.com:Kreucyu/MicroChefs-Cozinha.git
