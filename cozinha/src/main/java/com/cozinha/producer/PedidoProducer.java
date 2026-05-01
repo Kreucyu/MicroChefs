@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 @Component
-public class AtualizarPedidoProducer {
+public class PedidoProducer {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -21,6 +21,13 @@ public class AtualizarPedidoProducer {
                 "pedido-key.update",
                 objectMapper.writeValueAsString(update)
         );
+    }
 
+    public void dlqSender(String pedidoJson) {
+        amqpTemplate.convertAndSend(
+                "dead-letter-exchange",
+                "dead-message",
+                objectMapper.writeValueAsString(pedidoJson)
+        );
     }
 }

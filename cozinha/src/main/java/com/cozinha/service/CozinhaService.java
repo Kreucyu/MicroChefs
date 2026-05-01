@@ -3,7 +3,7 @@ package com.cozinha.service;
 import com.cozinha.dto.PedidoRecoveryDto;
 import com.cozinha.dto.UpdatePedidoDto;
 import com.cozinha.entities.StatusPedido;
-import com.cozinha.producer.AtualizarPedidoProducer;
+import com.cozinha.producer.PedidoProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CozinhaService {
 
     @Autowired
-    private AtualizarPedidoProducer atualizarPedidoProducer;
+    private PedidoProducer pedidoProducer;
 
     public void realizarPedido(PedidoRecoveryDto pedido) {
 
@@ -23,7 +23,7 @@ public class CozinhaService {
             throw new RuntimeException(e);
         }
 
-        atualizarPedidoProducer.enviarAtualizacao(new UpdatePedidoDto(pedido.id(), StatusPedido.EM_PREPARO));
+        pedidoProducer.enviarAtualizacao(new UpdatePedidoDto(pedido.id(), StatusPedido.EM_PREPARO));
         System.out.println("Atualizado");
 
         try {
@@ -32,7 +32,7 @@ public class CozinhaService {
             throw new RuntimeException(e);
         }
 
-        atualizarPedidoProducer.enviarAtualizacao(new UpdatePedidoDto(pedido.id(), StatusPedido.PRONTO));
+        pedidoProducer.enviarAtualizacao(new UpdatePedidoDto(pedido.id(), StatusPedido.PRONTO));
         System.out.println("Atualizado 2");
     }
 }
