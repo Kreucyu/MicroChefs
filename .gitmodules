@@ -4,3 +4,6 @@
 [submodule "Pedido-Service"]
 	path = Pedido-Service
 	url = git@github.com:Kreucyu/MicroChefs-Pedido-Service.git
+[submodule "DLQSupport"]
+	path = DLQSupport
+	url = git@github.com:Kreucyu/MicroChefs-DLQSupport.git
