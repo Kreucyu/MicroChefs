@@ -16,3 +16,6 @@
 [submodule "Frontend"]
 	path = Frontend
 	url = https://github.com/machadobatistacosta/MicroChefs-Frontend.git
+[submodule "Produto-Service"]
+	path = Produto-Service
+	url = https://github.com/machadobatistacosta/MicroChefs-Produto-Service.git
