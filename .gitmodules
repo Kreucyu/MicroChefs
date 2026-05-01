@@ -10,3 +10,6 @@
 [submodule "Eureka-Server"]
 	path = Eureka-Server
 	url = https://github.com/Baphomet/MicroChefs-Eureka-Server.git
+[submodule "Usuario-Service"]
+	path = Usuario-Service
+	url = https://github.com/Baphomet/MicroChefs-Usuario-Service
