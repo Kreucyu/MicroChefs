@@ -1,3 +1,6 @@
 [submodule "Cozinha"]
 	path = Cozinha
 	url = git@github.com:Kreucyu/MicroChefs-Cozinha.git
+[submodule "Pedido-Service"]
+	path = Pedido-Service
+	url = git@github.com:Kreucyu/MicroChefs-Pedido-Service.git
