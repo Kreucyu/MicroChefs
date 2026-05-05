@@ -1,17 +1,71 @@
+
 services:
+  eureka-server:
+    build: ./Eureka-Server
+    container_name: eureka_server
+    ports:
+      - "8761:8761"
+    networks:
+      - private_network
 
-  #  spring:
-  #    build: .
-  #    container_name: spring_app
-  #    ports:
-  #      - "8090:8090"
-  #    networks:
-  #      - private_network
-  #    environment:
-  #      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pedidos
-  #      SPRING_DATASOURCE_USERNAME: docker
-  #      SPRING_DATASOURCE_PASSWORD: docker
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - private_network
 
+  produto-service:
+    build: ./Produto-Service
+    container_name: produto_service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - produtos_db
+      - eureka-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://produtos_db:5432/produtos
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    networks:
+      - private_network
+
+  pedido-service:
+    build: ./Pedido-Service
+    container_name: pedido_service
+    ports:
+      - "8090:8090"
+    depends_on:
+      - pedidos_db
+      - eureka-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pedidos_db:5432/pedidos
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
+      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    networks:
+      - private_network
+
+  cozinha-service:
+    build: ./Cozinha
+    container_name: cozinha_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - rabbitmq
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    networks:
+      - private_network
+
+  # Databases
   pedidos_db:
     image: postgres:16
     container_name: pedidos_postgres
@@ -19,47 +73,34 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: pedidos
-      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5433:5432"
-    volumes:
-      - postgres_data_pedidos:/var/lib/postgresql/data
     networks:
       - private_network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U docker -d pedidos" ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
 
-  mensagens_db:
+  usuarios_db:
+    image: mysql:8.0
+    container_name: usuarios_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: ClienteService
+    ports:
+      - "3306:3306"
+    networks:
+      - private_network
+
+  produtos_db:
     image: postgres:16
-    container_name: mensagens_postgres
+    container_name: produtos_postgres
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: mensagens
-      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: produtos
     ports:
-      - "5434:5432"
-    volumes:
-      - postgres_data_mensagens:/var/lib/postgresql/data
+      - "5436:5432"
     networks:
       - private_network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U docker -d mensagens" ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres_data_pedidos:
-    driver: local
-  postgres_data_mensagens:
-    driver: local
 
 networks:
     private_network:
       driver: bridge
-
-
