@@ -8,14 +8,6 @@ services:
     networks:
       - private_network
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - private_network
 
   produto-service:
     build: ./Produto-Service
@@ -28,6 +20,10 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://produtos_db:5432/produtos
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
+      - SPRING_RABBITMQ_USERNAME=voowobdz
+      - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
+      - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
     networks:
       - private_network
 
@@ -43,9 +39,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://pedidos_db:5432/pedidos
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
-      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
+      - SPRING_RABBITMQ_USERNAME=voowobdz
+      - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
+      - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
     networks:
       - private_network
 
@@ -56,12 +53,12 @@ services:
       - "8080:8080"
     depends_on:
       - eureka-server
-      - rabbitmq
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_RABBITMQ_ADDRESSES=rabbitmq:5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
+      - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
+      - SPRING_RABBITMQ_USERNAME=voowobdz
+      - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
+      - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
     networks:
       - private_network
 
@@ -98,6 +95,31 @@ services:
       POSTGRES_DB: produtos
     ports:
       - "5436:5432"
+    networks:
+      - private_network
+
+  usuario-service:
+    build: ./Usuario-Service
+    container_name: usuario_service
+    ports:
+      - "5000:8080"
+    depends_on:
+      - usuarios_db
+    environment:
+      - ConnectionStrings__Mysql=Server=usuarios_mysql;Port=3306;Database=ClienteService;Uid=root;Pwd=admin;
+      - RabbitMQ__Uri=amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
+      - Eureka__Client__ServiceUrl=http://eureka-server:8761/eureka/
+    networks:
+      - private_network
+
+  frontend:
+    build: ./Frontend
+    container_name: frontend_app
+    ports:
+      - "4200:80"
+    depends_on:
+      - produto-service
+      - pedido-service
     networks:
       - private_network
 
