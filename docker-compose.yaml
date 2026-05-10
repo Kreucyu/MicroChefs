@@ -1,68 +1,97 @@
-
 services:
-  eureka-server:
-    build: ./Eureka-Server
-    container_name: eureka_server
+  usuario-service:
+    build: ./MicroChefs-Usuario-Service
+    container_name: usuario_service
     ports:
-      - "8761:8761"
-    networks:
-      - private_network
-
-
-  produto-service:
-    build: ./Produto-Service
-    container_name: produto_service
-    ports:
-      - "8081:8081"
+      - "9000:8080"
     depends_on:
-      - produtos_db
-      - eureka-server
+      usuarios_db:
+        condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://produtos_db:5432/produtos
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
-      - SPRING_RABBITMQ_USERNAME=voowobdz
-      - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
-      - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
+      - ConnectionStrings__Mysql=Server=usuarios_mysql;Port=3306;Database=ClienteService;Uid=root;Pwd=admin;
+      - RabbitMQ__Uri=amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
     networks:
       - private_network
-
+ 
   pedido-service:
-    build: ./Pedido-Service
+    build: ./MicroChefs-Pedido-Service
     container_name: pedido_service
     ports:
-      - "8090:8090"
+      - "9001:9001"
     depends_on:
-      - pedidos_db
-      - eureka-server
+      pedidos_db:
+        condition: service_healthy
     environment:
+      - SERVER_PORT=9001
       - SPRING_DATASOURCE_URL=jdbc:postgresql://pedidos_db:5432/pedidos
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - EUREKA_CLIENT_ENABLED=true
       - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
       - SPRING_RABBITMQ_USERNAME=voowobdz
       - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
       - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
+      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://otel-collector:4318/v1/traces
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
     networks:
       - private_network
-
+ 
   cozinha-service:
-    build: ./Cozinha
-    container_name: cozinha_service
+    build: ./MicroChefs-Cozinha
     ports:
-      - "8080:8080"
-    depends_on:
-      - eureka-server
+      - "9010:9010"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SERVER_PORT=9010
+      - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
+      - SPRING_RABBITMQ_USERNAME=voowobdz
+      - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
+      - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
+      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://otel-collector:4318/v1/traces
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
+    networks:
+      - private_network
+ 
+  dlq-support:
+    build: ./MicroChefs-DLQSupport
+    container_name: dlq_support
+    ports:
+      - "9003:9003"
+    depends_on:
+      dlq_db:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT=9003
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dlq_db:5432/mensagens
       - SPRING_RABBITMQ_ADDRESSES=jackal.rmq.cloudamqp.com
       - SPRING_RABBITMQ_USERNAME=voowobdz
       - SPRING_RABBITMQ_PASSWORD=oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY
       - SPRING_RABBITMQ_VIRTUAL_HOST=voowobdz
     networks:
       - private_network
-
-  # Databases
+ 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - pedido-service
+      - cozinha-service
+    networks:
+      - private_network
+ 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - private_network
+ 
   pedidos_db:
     image: postgres:16
     container_name: pedidos_postgres
@@ -70,11 +99,19 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: pedidos
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5433:5432"
+      - "9004:5432"
+    volumes:
+      - postgres_data_pedidos:/var/lib/postgresql/data
     networks:
       - private_network
-
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U docker -d pedidos" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+ 
   usuarios_db:
     image: mysql:8.0
     container_name: usuarios_mysql
@@ -82,47 +119,47 @@ services:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: ClienteService
     ports:
-      - "3306:3306"
+      - "9005:3306"
+    volumes:
+      - mysql_data_usuarios:/var/lib/mysql
     networks:
       - private_network
-
-  produtos_db:
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+ 
+  dlq_db:
     image: postgres:16
-    container_name: produtos_postgres
+    container_name: dlq_postgres
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: produtos
+      POSTGRES_DB: mensagens
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5436:5432"
+      - "9006:5432"
+    volumes:
+      - postgres_data_mensagens:/var/lib/postgresql/data
     networks:
       - private_network
-
-  usuario-service:
-    build: ./Usuario-Service
-    container_name: usuario_service
-    ports:
-      - "5000:8080"
-    depends_on:
-      - usuarios_db
-    environment:
-      - ConnectionStrings__Mysql=Server=usuarios_mysql;Port=3306;Database=ClienteService;Uid=root;Pwd=admin;
-      - RabbitMQ__Uri=amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
-      - Eureka__Client__ServiceUrl=http://eureka-server:8761/eureka/
-    networks:
-      - private_network
-
-  frontend:
-    build: ./Frontend
-    container_name: frontend_app
-    ports:
-      - "4200:80"
-    depends_on:
-      - produto-service
-      - pedido-service
-    networks:
-      - private_network
-
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U docker -d mensagens" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+ 
+volumes:
+  postgres_data_pedidos:
+    driver: local
+  postgres_data_mensagens:
+    driver: local
+  mysql_data_usuarios:
+    driver: local
+  grafana_data:
+    driver: local
+ 
 networks:
-    private_network:
-      driver: bridge
+  private_network:
+    driver: bridge
