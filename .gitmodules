@@ -7,12 +7,6 @@
 [submodule "DLQSupport"]
 	path = DLQSupport
 	url = git@github.com:Kreucyu/MicroChefs-DLQSupport.git
-[submodule "Eureka-Server"]
-	path = Eureka-Server
-	url = https://github.com/Baphomet/MicroChefs-Eureka-Server.git
 [submodule "Usuario-Service"]
 	path = Usuario-Service
 	url = https://github.com/Baphomet/MicroChefs-Usuario-Service
-[submodule "Produto-Service"]
-	path = Produto-Service
-	url = https://github.com/machadobatistacosta/MicroChefs-Produto-Service.git
