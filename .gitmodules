@@ -10,3 +10,6 @@
 [submodule "Usuario-Service"]
 	path = Usuario-Service
 	url = https://github.com/Baphomet/MicroChefs-Usuario-Service
+[submodule "Produto-Service"]
+	path = Produto-Service
+	url = git@github.com:Kreucyu/MicroChefs-Produto-Service.git
