@@ -32,7 +32,7 @@ services:
       - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
     networks:
       - private_network
- 
+
   cozinha-service:
     build: ./MicroChefs-Cozinha
     ports:
@@ -149,6 +149,35 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
+
+  produto_db:
+    image: postgres:16
+    container_name: produto_postgres
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: produtos
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "9007:5432"
+    volumes:
+      - postgres_data_produtos:/var/lib/postgresql/data
+    networks:
+      - private_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U docker -d produtos" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - private_network
  
 volumes:
   postgres_data_pedidos:
@@ -158,6 +187,8 @@ volumes:
   mysql_data_usuarios:
     driver: local
   grafana_data:
+    driver: local
+  postgres_data_produtos:
     driver: local
  
 networks:
