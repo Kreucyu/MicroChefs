@@ -13,3 +13,6 @@
 [submodule "Produto-Service"]
 	path = Produto-Service
 	url = git@github.com:Kreucyu/MicroChefs-Produto-Service.git
+[submodule "Front-end"]
+	path = Front-end
+	url = https://github.com/Baphomet/microchefs-front.git
