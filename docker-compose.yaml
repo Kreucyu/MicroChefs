@@ -1,17 +1,17 @@
 services:
-  usuario-service:
-    build: ./MicroChefs-Usuario-Service
-    container_name: usuario_service
-    ports:
-      - "9000:8080"
-    depends_on:
-      usuarios_db:
-        condition: service_healthy
-    environment:
-      - ConnectionStrings__Mysql=Server=usuarios_mysql;Port=3306;Database=ClienteService;Uid=root;Pwd=admin;
-      - RabbitMQ__Uri=amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
-    networks:
-      - private_network
+ # usuario-service:
+  #  build: ./MicroChefs-Usuario-Service
+   # container_name: usuario_service
+    #ports:
+     # - "9000:8080"
+   # depends_on:
+    #  usuarios_db:
+     #   condition: service_healthy
+  #  environment:
+   #   - ConnectionStrings__Mysql=Server=usuarios_mysql;Port=3306;Database=ClienteService;Uid=root;Pwd=admin;
+    #  - RabbitMQ__Uri=amqps://voowobdz:oPXu8xSnc3nXS_GlD6QR2wg9nz1afCdY@jackal.rmq.cloudamqp.com/voowobdz
+  #  networks:
+   #   - private_network
  
   pedido-service:
     build: ./MicroChefs-Pedido-Service
@@ -112,23 +112,24 @@ services:
       timeout: 5s
       retries: 5
  
-  usuarios_db:
-    image: mysql:8.0
-    container_name: usuarios_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: ClienteService
-    ports:
-      - "9005:3306"
-    volumes:
-      - mysql_data_usuarios:/var/lib/mysql
-    networks:
-      - private_network
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin" ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+ #usuarios_db:
+  #  image: mysql:8.0
+   # container_name: usuarios_mysql
+    #environment:
+     # MYSQL_ROOT_PASSWORD: admin
+      #MYSQL_DATABASE: ClienteService
+   # ports:
+   #   - "9005:3306"
+   # volumes:
+   #   - mysql_data_usuarios:/var/lib/mysql
+   # networks:
+   #   - private_network
+   # healthcheck:
+   #   test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin" ]
+   #  interval: 15s
+   #   timeout: 5s
+   #   retries: 5
+  
  
   dlq_db:
     image: postgres:16
@@ -173,7 +174,6 @@ services:
   redis:
     image: redis
     container_name: redis
-    hostname: redis
     ports:
       - "6379:6379"
     networks:

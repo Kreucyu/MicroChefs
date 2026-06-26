@@ -1,0 +1,26 @@
+﻿[
+    {
+        "targets":  [
+                        "172.18.0.10:9090"
+                    ],
+        "labels":  {
+                       "service":  "cozinha"
+                   }
+    },
+    {
+        "targets":  [
+                        "172.18.0.16:9090"
+                    ],
+        "labels":  {
+                       "service":  "cozinha"
+                   }
+    },
+    {
+        "targets":  [
+                        "172.18.0.17:9090"
+                    ],
+        "labels":  {
+                       "service":  "cozinha"
+                   }
+    }
+]

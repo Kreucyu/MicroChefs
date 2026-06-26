@@ -1,0 +1,8 @@
+﻿{
+    "targets":  [
+                    "172.18.0.8:8100"
+                ],
+    "labels":  {
+                   "service":  "pedido"
+               }
+}

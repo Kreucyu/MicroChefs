@@ -1,0 +1,16 @@
+# =============================================================================
+# Grafana Dashboard Auto-Provisioning
+# =============================================================================
+apiVersion: 1
+
+providers:
+  - name: "MicroChefs"
+    orgId: 1
+    folder: "MicroChefs"
+    type: file
+    disableDeletion: false
+    editable: true
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false
